@@ -1,0 +1,345 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Pr&aacute;ctica 4: Convoluci&oacute;n y Correlaci&oacute;n de se&ntilde;ales en tiempo continuo</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-01"><meta name="DC.source" content="SySPrac4AlexisDiego.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Pr&aacute;ctica 4: Convoluci&oacute;n y Correlaci&oacute;n de se&ntilde;ales en tiempo continuo</h1><!--introduction--><p>Integrantes</p><div><ul><li>Alvarez Garcia Elian Alexander</li><li>Diego Vertiz Alexis</li><li>Marquina Zendejas Victor</li><li>Mendivil Herrera Jesus Alejandro</li></ul></div><p>UPIITA IPN Se&ntilde;ales y Sistemas Grupo: 2TV1</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Objetivos</a></li><li><a href="#2">Introduccion</a></li><li><a href="#33">Problema 1</a></li><li><a href="#39">Problema 2</a></li><li><a href="#44">Problema 3</a></li><li><a href="#52">Problema 4</a></li></ul></div><h2 id="1">Objetivos</h2><div><ul><li>Conocer m&eacute;todos b&aacute;sicos de integraci&oacute;n num&eacute;rica</li><li>Manipulaci&oacute;n de instrucciones en MATLAB</li><li>Simular convoluciones y correlaciones de se&ntilde;ales continuas</li></ul></div><h2 id="2">Introduccion</h2><div><ul><li>Teorema fundamental del c&aacute;lculo</li></ul></div><p>Asociamos a la funci&oacute;n <img src="SySPrac4AlexisDiego_eq04051036203930117574.png" alt="$\int_{a}^{b}f\left(x\right)dx$">  a el &aacute;rea definida por la funci&oacute;n grafica de la funci&oacute;n f(a) Una recta (l1) definida por el punto ((a,0) (a,f(a)) es decir una l&iacute;nea recta que pasa por esos dos puntos. Una recta (l2) definida por el punto ((b,0) (b,f(b)) es decir una l&iacute;nea recta que pasa por esos dos puntos. Y una recta (l3) definida por el punto ((a,0) (b,0) es decir una l&iacute;nea recta que pasa por esos dos puntos. En t&eacute;rminos geom&eacute;tricos tenemos lo siguiente:</p><p><img vspace="5" hspace="5" src="im1.png" alt=""> </p><p>Como se aprecia la funci&oacute;n est&aacute; definida de a hasta b, el n&uacute;mero asociado seria la &aacute;rea dibujada en gris en este caso. Normalmente usamos el teorema fundamental del c&aacute;lculo, el cual especifica que si f  es integrable (la regi&oacute;n esta bien definida) y  <img src="SySPrac4AlexisDiego_eq03039769761355901935.png" alt="$\frac{dF(x)}{dy}=f(x)$"> (anti derivada) entonces resulta ser que el numero asociado a la idea geom&eacute;trica se puede calcular como F(b)-F(a) lo cual seria igual a: <img src="SySPrac4AlexisDiego_eq04051036203930117574.png" alt="$\int_{a}^{b}f\left(x\right)dx$"> Sin embargo, en ocasiones resulta dif&iacute;cil encontrar F y aqu&iacute; es donde aplicaremos t&eacute;cnicas de integraci&oacute;n como lo son: Cambio de variable, Integraci&oacute;n por partes, Sustituci&oacute;n trigonom&eacute;trica, etc. Ya que estas funcionan lo que hacen es encontrar la antidervida y teni&eacute;ndola, prosigues a evaluar a una integral definida y haces una resta de funciones de anti derivada</p><p>Ejemplo: <img src="SySPrac4AlexisDiego_eq02058335814056655631.png" alt="$f\left(x\right)=e^{-x^2}$"></p><p>Si yo quisiera encontrar f(x) con el teorema fundamental del c&aacute;lculo compruebo que es una funci&oacute;n continua es integrable en un intervalo. El problema es que al usar el teorema fundamental del c&aacute;lculo, al evaluarla  no existir&iacute;a ya que:</p><p><img src="SySPrac4AlexisDiego_eq17696051708379503087.png" alt="$\int_{-1}^{1}{f\left(x\right)dx=\int_{-1}^{1}{e^{-x^2}dx=F\left(1\right)-F(-1)}}$"></p><p>Por lo tanto como quiero encontrar el &aacute;rea, quiero encontrar el &aacute;rea gris</p><p><img vspace="5" hspace="5" src="im2.png" alt=""> </p><p>Aproximaremos el &aacute;rea lo m&aacute;s cercano posible, construiremos un polinomio y se parezca de sentido que al evaluar el polinomio o la funci&oacute;n original de casi la misma altura. Integraci&oacute;n num&eacute;rica es sustituir funciones por polinomios. Por ejemplo:</p><p><img vspace="5" hspace="5" src="im3.png" alt=""> </p><p>Una aproximaci&oacute;n seria aproximar con un polinomio constante f(x)=1 (l&iacute;nea roja) El &aacute;rea que encierra el rect&aacute;ngulo tiene longitud 2 El &aacute;rea gris es menor que el &aacute;rea delimitada por el rect&aacute;ngulo rojo. Como primera aproximaci&oacute;n doy entendido que la funci&oacute;n es menor que dos ( el &aacute;rea del rect&aacute;ngulo rojo)</p><p><img src="SySPrac4AlexisDiego_eq17988275748973432633.png" alt="$\int_{-1}^{1}{e^{-x^2}dx}<2$"> Tomando en cuenta que se puede dividir la imagen en segmentos de 4 x 4 argumentas que el &aacute;rea es aproximadamente 1.4936 mediante c&aacute;lculos de aproximaci&oacute;n</p><p><img src="SySPrac4AlexisDiego_eq09798742941979963256.png" alt="$\int_{-1}^{1}{e^{-x^2}dx}=1.4936$"></p><div><ul><li>F&oacute;rmulas cerradas de Newton-Cotes</li></ul></div><p><img vspace="5" hspace="5" src="im4.png" alt=""> </p><div><ul><li>Regla del trapecio (n=1)</li></ul></div><p><img vspace="5" hspace="5" src="im5.png" alt=""> </p><div><ul><li>Regla de Simpson (n=2)</li></ul></div><p><img vspace="5" hspace="5" src="im6.png" alt=""> </p><div><ul><li>Regla de tres octavos de Simpson (n=3)</li></ul></div><p><img vspace="5" hspace="5" src="im7.png" alt=""> </p><div><ul><li>Regla del trapecio compuesta</li></ul></div><p><img vspace="5" hspace="5" src="im8.png" alt=""> </p><p><img vspace="5" hspace="5" src="im9.png" alt=""> </p><div><ul><li>Regla compuesta de Simpson</li></ul></div><p><img vspace="5" hspace="5" src="im10.png" alt=""> </p><p><img vspace="5" hspace="5" src="im11.png" alt=""> </p><h2 id="33">Problema 1</h2><p>Realiza la convolucion de las siguientes se&ntilde;ales x(t) y h(t)</p><pre class="codeinput">x = @(t) ((-t+1).*(t&gt;=0 &amp; t&lt;1))+((t-1).*(t&gt;=1 &amp; t&lt;2));
+h = @(t) ((1).*(t&gt;=0 &amp; t&lt;1));
+y = @(t) (((-t.^2/2)+t).*(t&gt;=0 &amp; t&lt;1))+(((t.^2)-(3*t)+(5/2)).*(t&gt;=1 &amp; t&lt;2))+(((-t.^2/2)+(2*t)-(3/2)).*(t&gt;=2 &amp; t&lt;3));
+
+graficarsenal(x,h)
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_01.png" alt=""> <p><img vspace="5" hspace="5" src="primero.gif" alt=""> </p><p>La convolucion es la siguiente</p><pre class="codeinput">convconm(x,h)
+legend(<span class="string">'R. Grafico'</span>)<span class="comment">% Caja de Texto</span>
+fplot(y,[-4.5,4.5],<span class="string">'--b'</span>,<span class="string">'DisplayName'</span>,<span class="string">'R. Analitico'</span>)
+
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_02.png" alt=""> <p>El resultado analitico es:</p><p><img vspace="5" hspace="5" src="analitico1.png" alt=""> </p><h2 id="39">Problema 2</h2><p>Realiza la convolucion de las siguientes se&ntilde;ales x(t) y h(t)</p><pre class="codeinput">x = @(t) ((t).*(t&gt;=0 &amp; t&lt;1))+((1).*(t&gt;=1 &amp; t&lt;2));
+h = @(t) 1.*(t&gt;=1&amp;t&lt;3);
+y = @(t) ((t.^2/2)-t+(1/2)).*(t&gt;=1&amp;t&lt;2)+((t-(3/2)).*(t&gt;=2&amp;t&lt;3))+(((-t.^2/2)+(3*t)-3).*(t&gt;=3&amp;t&lt;4))+((-t+5).*(t&gt;=4&amp;t&lt;5));
+graficarsenal(x,h)
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_03.png" alt=""> <p><img vspace="5" hspace="5" src="segundo.gif" alt=""> </p><p>La convolucion es la siguiente</p><pre class="codeinput">convconm(x,h)
+legend(<span class="string">'R. Grafico'</span>)<span class="comment">% Caja de Texto</span>
+fplot(y,[-4.5,5.1],<span class="string">'--b'</span>,<span class="string">'DisplayName'</span>,<span class="string">'R. Analitico'</span>)
+
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_04.png" alt=""> <p>El resultado analitico es:</p><p><img vspace="5" hspace="5" src="analitico2.png" alt=""> </p><h2 id="44">Problema 3</h2><p>Realiza la autocorrelacion de <img src="SySPrac4AlexisDiego_eq09982827944952276114.png" alt="$x(t)= u(t)-2u(t-3)+u(t-4)$"></p><p>En este caso tomamos h(t) como la funcion x(t)</p><p><img src="SySPrac4AlexisDiego_eq03542331740725289943.png" alt="$r_{xh}(t)=x(t)*h(-t)$"></p><pre class="codeinput">x = @(t) ((1).*(t&gt;=0 &amp; t&lt;3))+((-1).*(t&gt;=3 &amp; t&lt;4));
+h = @(t) ((1).*(t&gt;=-3 &amp; t&lt;0))+((-1).*(t&gt;=-4 &amp; t&lt;-3));
+y = @(t) ((-t-4).*(t&gt;=-4 &amp; t&lt;-3))+((t+2).*(t&gt;=-3 &amp; t&lt;-1))+(((3*t)+4).*(t&gt;=-1 &amp; t&lt;0))+(((-3*t)+4).*(t&gt;=0 &amp; t&lt;1))+((-t+2)*(t&gt;=1 &amp; t&lt;3))+((t-4).*(t&gt;=3 &amp; t&lt;4));
+graficarsenal(x,h)
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_05.png" alt=""> <p><img vspace="5" hspace="5" src="tercero.gif" alt=""> </p><p>La correlacion es la siguiente</p><pre class="codeinput">convconm(x,h)
+legend(<span class="string">'R. Grafico'</span>)<span class="comment">% Caja de Texto</span>
+fplot(y,[-4.5,4.5],<span class="string">'--b'</span>,<span class="string">'DisplayName'</span>,<span class="string">'R. Analitico'</span>)
+
+hold <span class="string">off</span>
+</pre><pre class="codeoutput">Warning: Function behaves unexpectedly on array inputs. To improve performance,
+properly vectorize your function to return an output with the same size and
+shape as the input arguments. 
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_06.png" alt=""> <p>El resultado analitico es:</p><p><img vspace="5" hspace="5" src="analitico3.png" alt=""> </p><h2 id="52">Problema 4</h2><p>Realiza la correlacion de <img src="SySPrac4AlexisDiego_eq16817777480604776664.png" alt="$r_(xh)(t)$"></p><p><img src="SySPrac4AlexisDiego_eq09220180725173341500.png" alt="$x(t)= u(t)-2u(t-2)+u(t-4)$"></p><p><img src="SySPrac4AlexisDiego_eq00233061665271412153.png" alt="$h(t)= u(t)-2u(t-3)+u(t-4)$"></p><p><img src="SySPrac4AlexisDiego_eq03542331740725289943.png" alt="$r_{xh}(t)=x(t)*h(-t)$"></p><pre class="codeinput">x = @(t) ((1).*(t&gt;=0 &amp; t&lt;2))+((-1).*(t&gt;=2 &amp; t&lt;4));
+h = @(t) ((1).*(t&gt;=-3 &amp; t&lt;0))+((-1).*(t&gt;=-4 &amp; t&lt;-3));
+y = @(t) ((-t-4).*(t&gt;=-4 &amp; t&lt;-3))+((t+2).*(t&gt;=-3 &amp; t&lt;-2))+(((3*t)+6).*(t&gt;=-2 &amp; t&lt;-1))+(((-t)+2).*(t&gt;=-1 &amp; t&lt;0))+((-3*t+2).*(t&gt;=0 &amp; t&lt;1))+((-t).*(t&gt;=1 &amp; t&lt;2))+((t-4).*(t&gt;=2 &amp; t&lt;4))	;
+
+graficarsenal(x,h)
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_07.png" alt=""> <p><img vspace="5" hspace="5" src="cuarto.gif" alt=""> </p><p>La correlacion es la siguiente</p><pre class="codeinput">convconm(x,h)
+legend(<span class="string">'R. Grafico'</span>)<span class="comment">% Caja de Texto</span>
+fplot(y,[-4.5,4.5],<span class="string">'--b'</span>,<span class="string">'DisplayName'</span>,<span class="string">'R. Analitico'</span>)
+
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="SySPrac4AlexisDiego_08.png" alt=""> <img vspace="5" hspace="5" src="SySPrac4AlexisDiego_09.png" alt=""> <p>El resultado analitico es:</p><p><img vspace="5" hspace="5" src="analitico4.png" alt=""> </p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Práctica 4: Convolución y Correlación de señales en tiempo continuo
+% Integrantes
+%
+% * Alvarez Garcia Elian Alexander
+% * Diego Vertiz Alexis
+% * Marquina Zendejas Victor 
+% * Mendivil Herrera Jesus Alejandro
+%
+% UPIITA IPN   
+% Señales y Sistemas
+% Grupo: 2TV1 
+%
+%% Objetivos
+%
+% * Conocer métodos básicos de integración numérica
+% * Manipulación de instrucciones en MATLAB
+% * Simular convoluciones y correlaciones de señales continuas
+%
+%% Introduccion
+% * Teorema fundamental del cálculo
+%%
+% Asociamos a la función $\int_{a}^{b}f\left(x\right)dx$  a el área definida
+% por la función grafica de la función f(a) Una recta (l1) definida por el
+% punto ((a,0) (a,f(a)) es decir una línea recta que pasa por esos dos puntos.
+% Una recta (l2) definida por el punto ((b,0) (b,f(b)) es decir una línea
+% recta que pasa por esos dos puntos. Y una recta (l3) definida por el punto 
+% ((a,0) (b,0) es decir una línea recta que pasa por esos dos puntos.
+% En términos geométricos tenemos lo siguiente:
+%%
+% 
+% <<im1.png>>
+%
+%%
+% Como se aprecia la función está definida de a hasta b, el número asociado 
+% seria la área dibujada en gris en este caso.
+% Normalmente usamos el teorema fundamental del cálculo, el cual especifica 
+% que si f  es integrable (la región esta bien definida) y  $\frac{dF(x)}{dy}=f(x)$ 
+% (anti derivada) entonces resulta ser que el numero asociado a la idea 
+% geométrica se puede calcular como F(b)-F(a) lo cual seria igual a: 
+% $\int_{a}^{b}f\left(x\right)dx$ Sin embargo, en ocasiones resulta difícil
+% encontrar F y aquí es donde aplicaremos técnicas de integración como lo son:
+% Cambio de variable, Integración por partes, Sustitución trigonométrica, etc.
+% Ya que estas funcionan lo que hacen es encontrar la antidervida y teniéndola, 
+% prosigues a evaluar a una integral definida y haces una resta de funciones de anti derivada
+%%
+% Ejemplo: $f\left(x\right)=e^{-x^2}$
+%%
+% Si yo quisiera encontrar f(x) con el teorema fundamental del cálculo compruebo que es una función continua es integrable en un intervalo. El problema es que al usar el teorema fundamental del cálculo, al evaluarla  no existiría ya que:
+%%
+% $\int_{-1}^{1}{f\left(x\right)dx=\int_{-1}^{1}{e^{-x^2}dx=F\left(1\right)-F(-1)}}$
+%%
+% Por lo tanto como quiero encontrar el área, quiero encontrar el área gris
+%%
+% 
+% <<im2.png>>
+% 
+%%
+% Aproximaremos el área lo más cercano posible, construiremos un polinomio
+% y se parezca de sentido que al evaluar el polinomio o la función original
+% de casi la misma altura.
+% Integración numérica es sustituir funciones por polinomios. Por ejemplo:	
+%%
+% 
+% <<im3.png>>
+% 
+%%
+% Una aproximación seria aproximar con un polinomio constante f(x)=1
+% (línea roja) El área que encierra el rectángulo tiene longitud 2
+% El área gris es menor que el área delimitada por el rectángulo rojo.
+% Como primera aproximación doy entendido que la función es menor que dos 
+% ( el área del rectángulo rojo) 
+%%
+% $\int_{-1}^{1}{e^{-x^2}dx}<2$
+% Tomando en cuenta que se puede dividir la imagen en segmentos de 4 x 4 
+% argumentas que el área es aproximadamente 1.4936 mediante cálculos de aproximación 
+%%
+% $\int_{-1}^{1}{e^{-x^2}dx}=1.4936$
+%%
+% * Fórmulas cerradas de Newton-Cotes
+%%
+% 
+% <<im4.png>>
+% 
+%%
+% * Regla del trapecio (n=1)
+%%
+% 
+% <<im5.png>>
+% 
+%%
+% * Regla de Simpson (n=2) 
+%%
+% 
+% <<im6.png>>
+% 
+%%
+% * Regla de tres octavos de Simpson (n=3)
+%%
+% 
+% <<im7.png>>
+% 
+%
+%%
+% * Regla del trapecio compuesta
+%%
+% 
+% <<im8.png>>
+% 
+%%
+%%
+% 
+% <<im9.png>>
+% 
+%%
+% * Regla compuesta de Simpson 
+%%
+%%
+% 
+% <<im10.png>>
+% 
+%%
+%%
+% 
+% <<im11.png>>
+% 
+%% Problema 1
+%%
+% Realiza la convolucion de las siguientes señales x(t) y h(t)
+x = @(t) ((-t+1).*(t>=0 & t<1))+((t-1).*(t>=1 & t<2));
+h = @(t) ((1).*(t>=0 & t<1));
+y = @(t) (((-t.^2/2)+t).*(t>=0 & t<1))+(((t.^2)-(3*t)+(5/2)).*(t>=1 & t<2))+(((-t.^2/2)+(2*t)-(3/2)).*(t>=2 & t<3));
+
+graficarsenal(x,h)
+%%
+%%
+% 
+% <<primero.gif>>
+% 
+%%
+% La convolucion es la siguiente
+convconm(x,h)
+legend('R. Grafico')% Caja de Texto
+fplot(y,[-4.5,4.5],'REPLACE_WITH_DASH_DASHb','DisplayName','R. Analitico')
+
+hold off
+%%
+% El resultado analitico es:
+% 
+% <<analitico1.png>>
+% 
+%% Problema 2
+% Realiza la convolucion de las siguientes señales x(t) y h(t)
+x = @(t) ((t).*(t>=0 & t<1))+((1).*(t>=1 & t<2));
+h = @(t) 1.*(t>=1&t<3);
+y = @(t) ((t.^2/2)-t+(1/2)).*(t>=1&t<2)+((t-(3/2)).*(t>=2&t<3))+(((-t.^2/2)+(3*t)-3).*(t>=3&t<4))+((-t+5).*(t>=4&t<5));
+graficarsenal(x,h)
+%%
+%%
+% 
+% <<segundo.gif>>
+% 
+%%
+% La convolucion es la siguiente
+convconm(x,h)
+legend('R. Grafico')% Caja de Texto
+fplot(y,[-4.5,5.1],'REPLACE_WITH_DASH_DASHb','DisplayName','R. Analitico')
+
+hold off
+%%
+% El resultado analitico es:
+% 
+% <<analitico2.png>>
+% 
+%% Problema 3
+% Realiza la autocorrelacion de $x(t)= u(t)-2u(t-3)+u(t-4)$
+%%
+% En este caso tomamos h(t) como la funcion x(t)   
+%%
+% $r_{xh}(t)=x(t)*h(-t)$
+x = @(t) ((1).*(t>=0 & t<3))+((-1).*(t>=3 & t<4));
+h = @(t) ((1).*(t>=-3 & t<0))+((-1).*(t>=-4 & t<-3));
+y = @(t) ((-t-4).*(t>=-4 & t<-3))+((t+2).*(t>=-3 & t<-1))+(((3*t)+4).*(t>=-1 & t<0))+(((-3*t)+4).*(t>=0 & t<1))+((-t+2)*(t>=1 & t<3))+((t-4).*(t>=3 & t<4));
+graficarsenal(x,h)
+%%
+%%
+% 
+% <<tercero.gif>>
+% 
+%%
+% La correlacion es la siguiente
+convconm(x,h)
+legend('R. Grafico')% Caja de Texto
+fplot(y,[-4.5,4.5],'REPLACE_WITH_DASH_DASHb','DisplayName','R. Analitico')
+
+hold off
+%%
+% El resultado analitico es:
+% 
+% <<analitico3.png>>
+% 
+%%
+%% Problema 4
+% Realiza la correlacion de $r_(xh)(t)$ 
+%%
+% $x(t)= u(t)-2u(t-2)+u(t-4)$
+%%
+% $h(t)= u(t)-2u(t-3)+u(t-4)$
+%%
+% $r_{xh}(t)=x(t)*h(-t)$
+x = @(t) ((1).*(t>=0 & t<2))+((-1).*(t>=2 & t<4));
+h = @(t) ((1).*(t>=-3 & t<0))+((-1).*(t>=-4 & t<-3));
+y = @(t) ((-t-4).*(t>=-4 & t<-3))+((t+2).*(t>=-3 & t<-2))+(((3*t)+6).*(t>=-2 & t<-1))+(((-t)+2).*(t>=-1 & t<0))+((-3*t+2).*(t>=0 & t<1))+((-t).*(t>=1 & t<2))+((t-4).*(t>=2 & t<4))	;
+
+graficarsenal(x,h)
+%%
+%%
+% 
+% <<cuarto.gif>>
+% 
+%%
+% La correlacion es la siguiente
+convconm(x,h)
+legend('R. Grafico')% Caja de Texto
+fplot(y,[-4.5,4.5],'REPLACE_WITH_DASH_DASHb','DisplayName','R. Analitico')
+
+hold off
+%%
+% El resultado analitico es:
+% 
+% <<analitico4.png>>
+% 
+%%
+##### SOURCE END #####
+--></body></html>
